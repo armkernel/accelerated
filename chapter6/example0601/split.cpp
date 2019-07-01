@@ -15,40 +15,54 @@ using std::cout; using std::cin;
 using std::endl; using std::vector;
 using std::string;
 
-// 참조로 전달받은 값을 새로운 메모리에 할당하는 것이 아니다. 즉, 메모리 효율성을 위해 const &로 많이 받음 
-// 값을 바꾸지 않는다는 것을 알때는 const를 사용!
-vector<string> split(const string& s)
+bool space(char c)
 {
+    return isspace(c);
+}
+
+bool not_space(char c)
+{
+    return !isspace(c);
+}
+
+vector<string> split(const string& str)
+{
+    typedef string::const_iterator iter;
     vector<string> ret;
-    typedef string::size_type string_sz;
 
-    // 초기화 해주지 않으면 오류남. segmentation fault로 접근하지 못할 영역에 접근했다고 나옴. 예상으로는 null ptr로 초기화하는 것이 아닐까 의심됨.
-    string_sz i = 0 ;
-    while (i != s.size()) {
-       
-        // 공백이 아닌 문자열 까지 돌아간다. 
-        while( i != s.size() && isspace(s[i])) {
-            ++i;
+    iter i = str.begin(); //begin 은 반복자를 반환함
+
+    while (i != str.end()) {
+        // 선행 공백 무시
+        i = find_if(i, str.end(), not_space);
+
+        // 단어의 끝을 찾아야해
+        iter j = find_if(i, str.end(), space);
+
+        /*
+         * find_if 함수는 첫 두 인수가 순차열을 나타내는 반복자를 가지고 있음.
+         * 세 번쨰 인수는 서술함수를 인자로 전달함. 
+         * 서술 함수는 참과 거짓을 반환하는 함수 
+         * find_if는 서술함수가 참을 반환하면 멈춘다.
+         * find_if는 해당하는 값이 없으면 두번째 인자인 str.end()를 반환함. 따라서, i를 굳이 계속 검사할 필요가 없다. 끝인지 아닌지..
+         * */
+
+        //[i,j] 범위의 문자복사 
+        if ( i != str.end() ) {
+            // 이전의 split에서는 substr을 써서 그 문자를 잘라내서 백터에 저장함
+            // 하지만 이제 반복자를 이용함 (즉, ㅅ인덱스를 사용하지 않는다 따라서, substr 사용 불가)
+            // 반복자를 복사하기 위해서 string을 임시객체로 만들어서 넣어줘야함.:
+            ret.push_back(string(i,j)); //string의 임시객체를 만듬 이후,,  반환
         }
 
-        // 공백아 아닌 문자의 위치를 j에 추가함
-        string_sz j = i;
-
-        // 공백이 아닌 문자가 공백이 나올때 까지 순회 
-        while( j != s.size() && !isspace(s[j])) {
-            j++;
-        }
-
-        // 다 돌고 나서 현재 내 위치가 i의 위치랑 같은지를 비교한다. 
-        // 같다면? 문자열을 다 돈 것이 때문에 복사할 필요가 없어. 다르다면 도중에 찾은것이기 때문에 복사 
-        if (i != j) {
-            ret.push_back(s.substr(i,j-1));
-            // 문자열 복사.. 
-            i = j;
-        } 
+        i = j;
     }
+
     return ret;
 }
+
+
+
 
 int main() 
 {
