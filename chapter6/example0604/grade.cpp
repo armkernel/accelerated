@@ -55,3 +55,9 @@ vector<Student_info> extract_fails(vector<Student_info>& student)
     return fail;
 }
 
+double median_analysis(const std::vector<Student_info>& students) 
+{
+    vector<double> grades;
+    transform(students.begin(), students.end(), back_inserter(grades), grade);
+    return median(grades);
+}
