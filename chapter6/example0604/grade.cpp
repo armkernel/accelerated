@@ -58,6 +58,9 @@ vector<Student_info> extract_fails(vector<Student_info>& student)
 double median_analysis(const std::vector<Student_info>& students) 
 {
     vector<double> grades;
+    // grade가 overloading되어 어떤 grade를 선택해야하는지 알 수 없다.
+    // 또한 과제가 0점 일경우 예외 처리를 해야하는데 그 부분을 할 수 없다
+    // 그 부분이 가능하도록 만드는 grade_aux함수를 만들어줘야한다 
     transform(students.begin(), students.end(), back_inserter(grades), grade);
     return median(grades);
 }
