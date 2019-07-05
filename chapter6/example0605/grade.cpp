@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <vector>
 #include <list>
+#include <algorithm>
+#include <numeric>
 
 #include "grade.h"
 #include "median.h"
@@ -9,6 +11,8 @@
 using std::domain_error;
 using std::vector;
 using std::list;
+using std::transform;
+using std::accumulate;
 
 double grade(double midterm, double finalterm, double homework) 
 {
@@ -85,7 +89,31 @@ double median_analysis(const std::vector<Student_info>& students)
     }
 }
 
+double average(const vector<double>& v)
+{
+    // #include <numeric> 함수에 있음
+    // 3번째 인자로 0이 아니라 0.0 으로 주는게 중요하다. 그래야 double형으로 암시적 변환이 되며
+    // 그 값을 기준으로 평균을 냄 
+    // accumulate는 summary함수이다 
+    return accumulate(v.begin(), v.end(), 0.0) / v.size(); 
+}
 
+double average_grade(const Student_info& s)
+{
+    return grade(s.midterm, s.finalterm, average(s.homework));
+}
+
+double average_analysis(const vector<Student_info>& students)
+{
+    vector<double> grades;
+    transform(students.begin(), students.end(), back_inserter(grades), average_grade);
+    try {
+        return median(grades);
+    }
+    catch (domain_error) {
+        return 0.0;
+    }
+}
 
 void write_analysis(std::ostream& out, const std::string& name,
         double analysis(const std::vector<Student_info>&),

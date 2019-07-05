@@ -50,6 +50,7 @@ int main()
 
     // 분석 실행
     write_analysis(cout, "median", median_analysis, did, didnt);
+    write_analysis(cout, "average", average_analysis, did, didnt);
     /*
     sort(students.begin(),students.end(),compare);
 
