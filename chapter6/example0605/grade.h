@@ -24,6 +24,6 @@ double median_analysis(const std::vector<Student_info>& );
 void write_analysis(std::ostream& , const std::string&, double (*ptr)(const std::vector<Student_info>&),
                     const std::vector<Student_info>&, const std::vector<Student_info>&);
 double average_analysis(const std::vector<Student_info>& );
-
+double optimistic_median_analysis(const std::vector<Student_info>&);
 
 #endif

@@ -115,6 +115,36 @@ double average_analysis(const vector<Student_info>& students)
     }
 }
 
+// 함수 이름이 optimistic인 이유는 과제를 하지 않았는데, 한 부분에 대해서만 
+// 중앙 값을 매기겠다는 이유에서.
+
+double optimistic_median(const Student_info& s) 
+{
+    vector<double> nonzero;
+    // 제거.. 
+    // 해당 값을 제거하고 복사하라. 해당값은 4번째 인자로 주어짐. 
+    remove_copy(s.homework.begin(), s.homework.end(), back_inserter(nonzero), 0);
+
+    if (nonzero.empty()) {
+        return grade(s.midterm, s.finalterm, 0);
+    } else {
+        return grade(s.midterm, s.finalterm, median(nonzero));
+    }
+}
+
+double optimistic_median_analysis(const std::vector<Student_info>& students)
+{
+    vector<double> grades;
+    transform(students.begin(), students.end(), back_inserter(grades), optimistic_median);
+    try{
+        return median(grades);
+    }
+    catch (domain_error) {
+        return 0.0;
+    }
+}
+
+
 void write_analysis(std::ostream& out, const std::string& name,
         double analysis(const std::vector<Student_info>&),
         const vector<Student_info>& did,
@@ -123,5 +153,3 @@ void write_analysis(std::ostream& out, const std::string& name,
     out << name << ": median(did) = " << analysis(did)
         << ",median(didnt) = " << analysis(didnt) << std::endl;
 }
-
-
