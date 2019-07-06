@@ -1,6 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <cctype> // c style의 기능을 cpp에서 상속 받은 것.
+
+#include "split.h"
 
 using std::cout; using std::cin;
 using std::endl; using std::vector;
@@ -33,17 +32,7 @@ vector<string> split(const string& s)
         // 다 돌고 나서 현재 내 위치가 i의 위치랑 같은지를 비교한다. 
         // 같다면? 문자열을 다 돈 것이 때문에 복사할 필요가 없어. 다르다면 도중에 찾은것이기 때문에 복사 
         if (i != j) {
-            // 만약 j-1 이면, i를 포함해서 이전 값까지 가져갈 수 있는 문제가 존재함
-            // 단어의 끝길이를 알려면 j-i를 해야함 
-            // 이건 그림을 그려보면 됨 
-            // --------------------------
-            //   |              |
-            //   i              j
-            //   start          end 
-            //   복사해야하는 길이가 end - start 
-            //   만약 end - 1 이 되면, i부터 end - 1까지가 복사됨 즉, 다 복사가 되지 않음 
-            //   또한 처음 시작 부는 난리남.. 
-            ret.push_back(s.substr(i, j-i));
+            ret.push_back(s.substr(i,j - i));
             // 문자열 복사.. 
             i = j;
         } 
@@ -51,15 +40,3 @@ vector<string> split(const string& s)
     return ret;
 }
 
-int main() 
-{
-    string s;
-
-    while( getline(cin, s) ) {
-        vector<string> v = split(s);
-
-        for (vector<string>::size_type i = 0; i != v.size(); i++) {
-            cout << v[i] << endl;
-        }
-    }
-}
